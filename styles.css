@@ -69,6 +69,9 @@ header .cta-button:hover {
   text-align: center;
   padding: 3rem 1rem;
   gap: 2rem;
+
+  /* Ensure the hero section fills at least the viewport height so the side index remains hidden until the first section */
+  min-height: 100vh;
 }
 
 .hero-content {
