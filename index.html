@@ -1,10 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Beckham Law Guide</title>
-</head>
-<body>
-  <!-- TODO: build the landing page -->
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beckham Law Guide</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;700&family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Site styles -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <a href="https://www.lullius.com/en/" class="logo-link"
+        ><img
+          src="assets/logo.svg"
+          alt="Lullius + Partners logo"
+          class="logo"
+      /></a>
+      <a href="#" class="cta-button" aria-label="Get the guide"
+        >Get the guide</a
+      >
+    </header>
+    <main>
+      <!-- Hero section -->
+      <section id="hero" class="hero">
+        <div class="hero-content">
+          <h1>Beckham Law Guide</h1>
+          <p>
+            Pay a flat 24% on employment income up to €600,000 and limit
+            Spanish tax to Spain‑source income, for up to six years. Learn who
+            qualifies, what you save, and how to apply.
+          </p>
+        </div>
+        <div class="hero-image">
+          <img
+            src="assets/hero.jpg"
+            alt="Beckham Law Guide hero"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      <!-- Sticky side index -->
+      <nav class="side-index" aria-label="Page sections">
+        <ul>
+          <li><a href="#eligibility">Eligibility Requirements</a></li>
+          <li><a href="#tax-benefits">Tax Benefits</a></li>
+          <li><a href="#how-to-apply">How to Apply</a></li>
+          <li><a href="#edge-cases">Who Qualifies / Edge Cases</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <!-- Eligibility Requirements section -->
+      <section id="eligibility" class="content-section">
+        <div class="section-image">
+          <img
+            src="assets/eligibility.jpg"
+            alt="Eligibility requirements"
+            loading="lazy"
+          />
+        </div>
+        <div class="section-text">
+          <h2>Eligibility Requirements</h2>
+          <ul>
+            <li>
+              Not Spanish tax resident in the previous 5 tax years. Tax
+              residence is determined by 183‑day presence, center of economic
+              interests, or family ties.
+            </li>
+            <li>
+              Relocate to Spain for work and acquire Spanish tax residence.
+              Start an eligible pathway soon after arrival: new employment in
+              Spain; transfer to a Spanish entity; remote employee in Spain for
+              a foreign employer; Spanish company director (shareholding limits
+              if no real activity); innovative entrepreneur; highly qualified
+              professional serving accredited startups; or self‑employed in
+              training, research, development, and innovation.
+            </li>
+            <li>
+              Apply within 6 months from start of activity (usually Social
+              Security registration or equivalent).
+            </li>
+            <li>
+              Do not earn income through a Spanish permanent establishment
+              except for the specific self‑employed cases allowed. Extra
+              caution with pass‑through entities.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Tax Benefits section -->
+      <section id="tax-benefits" class="content-section">
+        <div class="section-image">
+          <img
+            src="assets/tax-benefits.jpg"
+            alt="Tax benefits overview"
+            loading="lazy"
+          />
+        </div>
+        <div class="section-text">
+          <h2>Tax Benefits</h2>
+          <ul>
+            <li>
+              24% flat on employment income up to €600,000 per year. 47%
+              above that.
+            </li>
+            <li>
+              Spain taxes only Spain‑source income. Exceptions: employment
+              and allowed economic‑activity income are taxed in Spain
+              regardless of source.
+            </li>
+            <li>
+              Savings income (dividends, interest, capital gains) taxed at
+              19–28% as under the ordinary regime.
+            </li>
+            <li>
+              Wealth and Solidarity taxes only on assets located in Spain.
+            </li>
+            <li>No Modelo 720 obligation.</li>
+            <li>
+              Below roughly €55k–€60k of general‑base income the ordinary
+              regime may be better; above that, the special regime often wins.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- How to Apply section -->
+      <section id="how-to-apply" class="content-section">
+        <div class="section-image">
+          <img
+            src="assets/how-to-apply.jpg"
+            alt="Application steps"
+            loading="lazy"
+          />
+        </div>
+        <div class="section-text">
+          <h2>How to Apply</h2>
+          <ol>
+            <li>
+              <strong>Phase I — Assess quickly:</strong> check 6‑month
+              deadline, confirm advantage, verify requirements.
+            </li>
+            <li>
+              <strong>Phase II — File correctly:</strong> compile evidence
+              (causality of move for work), register with Tax Agency via
+              Form 030, submit application electronically with full
+              documentation; legal resolution window 10 business days but
+              typical ≈4–8 weeks.
+            </li>
+            <li>
+              <strong>Phase III — Each year:</strong> file the special
+              income tax return April–June for the prior year; assess
+              Wealth/Solidarity returns if applicable.
+            </li>
+            <li>
+              <strong>Phase IV — End of regime:</strong> ends on
+              non‑compliance, withdrawal, moving away, or after 6 tax years.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Who Qualifies / Edge Cases section -->
+      <section id="edge-cases" class="content-section">
+        <div class="section-image">
+          <img
+            src="assets/edge-cases.jpg"
+            alt="Who qualifies edge cases"
+            loading="lazy"
+          />
+        </div>
+        <div class="section-text">
+          <h2>Who Qualifies / Edge Cases</h2>
+          <ul>
+            <li>
+              Pathways recap: new Spanish employment; intra‑group transfer;
+              remote employee in Spain for a foreign employer; Spanish
+              company director (if no real activity, shareholding
+              &lt; 25%); innovative entrepreneur (ENISA or entrepreneur
+              residence); highly qualified professional serving accredited
+              startups; self‑employed in training/R&amp;D+i.
+            </li>
+            <li>
+              Causality of the move: job offer before arrival or work
+              starting within weeks supports causality.
+            </li>
+            <li>
+              Pass‑through entities risk being treated as Spanish permanent
+              establishment income.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- FAQ section -->
+      <section id="faq" class="content-section">
+        <div class="section-image">
+          <img
+            src="assets/faq.jpg"
+            alt="Frequently asked questions"
+            loading="lazy"
+          />
+        </div>
+        <div class="section-text">
+          <h2>FAQ</h2>
+          <ul>
+            <li><strong>Duration:</strong> up to six tax years.</li>
+            <li>
+              <strong>Rate on employment income:</strong> 24% up to
+              €600,000, then 47%.
+            </li>
+            <li>
+              <strong>What is taxed in Spain:</strong> Spain‑source income,
+              with the two exceptions noted above; savings income 19–28%.
+            </li>
+            <li><strong>Modelo 720:</strong> not required under this regime.</li>
+            <li>
+              <strong>Wealth/Solidarity:</strong> only assets located in
+              Spain are considered.
+            </li>
+            <li>
+              <strong>Freelancing:</strong> only in the specific allowed
+              cases; otherwise incompatible. Consider non‑transparent
+              entities case‑by‑case.
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>Lullius + Partners — All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
 </html>
