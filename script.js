@@ -2,33 +2,37 @@
 // and inertial scroll effect
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
+  const tocSentinel = document.getElementById('toc-sentinel');
   const footer = document.querySelector('footer');
   const header = document.querySelector('.site-header');
   const navLinks = document.querySelectorAll('.section-index a');
   // sections inside the content area (exclude hero)
   const sections = document.querySelectorAll('.sections-content section');
-  const firstSection = sections[0];
 
   // Measure header height for sticky offset and expose via CSS variable
   if (header) {
-    root.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    const setHeaderHeight = () =>
+      root.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    setHeaderHeight();
+    window.addEventListener('resize', setHeaderHeight);
   }
 
   /*
-   * Toggle TOC visibility when the first content section enters the viewport.
-   * Additionally, hide the TOC when the footer enters the viewport. This ensures
-   * the TOC becomes visible as soon as the main content starts and stays sticky
-   * until the footer.
+   * Toggle TOC visibility based on a sentinel element. The table of contents
+   * appears when the horizontal rule (#toc-sentinel) scrolls out of view and
+   * disappears again when it re-enters. Additionally, hide the TOC when the
+   * footer enters the viewport. This ensures the TOC becomes visible as soon as
+   * the main content starts and stays sticky until the footer.
    */
-  // Show/hide TOC based on first section intersection
-  if (firstSection) {
+  // Show/hide TOC based on sentinel intersection
+  if (tocSentinel) {
     new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+      if (!entry.isIntersecting) {
         root.classList.add('toc--visible');
       } else {
         root.classList.remove('toc--visible');
       }
-    }, { threshold: 0, rootMargin: `-${header ? header.offsetHeight : 0}px 0px 0px 0px` }).observe(firstSection);
+    }, { threshold: 0 }).observe(tocSentinel);
   }
   // Hide TOC when footer enters the viewport
   if (footer) {
@@ -46,10 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
           navLinks.forEach((link) => {
-            link.classList.toggle(
-              'active',
-              link.getAttribute('href') === `#${id}`
-            );
+            const isActive = link.getAttribute('href') === `#${id}`;
+            link.classList.toggle('active', isActive);
+            if (isActive) {
+              link.setAttribute('aria-current', 'page');
+            } else {
+              link.removeAttribute('aria-current');
+            }
           });
         }
       });
@@ -60,25 +67,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Smooth scroll behavior for nav links
+  // Smooth scroll behavior for nav links, respecting header height and
+  // prefers-reduced-motion. Also highlight the clicked link immediately.
+  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   navLinks.forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      const targetId = link.getAttribute('href').replace('#', '');
+      const targetId = link.getAttribute('href').slice(1);
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
         const headerH = header ? header.offsetHeight : 0;
-        const top = targetEl.offsetTop - headerH;
-        window.scrollTo({ top, behavior: 'smooth' });
+        const top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerH;
+        window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       }
-      navLinks.forEach((n) => n.classList.remove('active'));
+      navLinks.forEach((n) => {
+        n.classList.remove('active');
+        n.removeAttribute('aria-current');
+      });
       link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
     });
   });
 
-  // Inertial scroll for pointer devices (disable on touch devices)
+  // Inertial scroll for pointer devices (disable on touch devices and when
+  // prefers-reduced-motion is enabled)
   (function () {
     if (!matchMedia('(pointer: fine)').matches) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let current = window.pageYOffset;
     let target = current;
     let rafId = null;
@@ -107,3 +122,4 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('wheel', onWheel, { passive: false });
   })();
 });
+
