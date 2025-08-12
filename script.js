@@ -15,35 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /*
-   * Rework TOC visibility logic. The earlier implementation relied on a zero‑height
-   * sentinel <hr> element to toggle the TOC when it scrolled out of view. In
-   * practice the IntersectionObserver sometimes failed to fire because the
-   * sentinel had no height. To make the behaviour deterministic, observe the
-   * hero and the first content section instead. When the hero is in view the
-   * TOC is hidden; as soon as the first section (eligibility) appears the TOC
-   * becomes visible. It is hidden again only when the footer enters the
-   * viewport. This matches the requirement that the TOC appears upon
-   * entering “Eligibility Requirements” and stays sticky until the footer.
+   * Toggle TOC visibility based on a sentinel element. The table of contents
+   * appears when the horizontal rule (#toc-sentinel) scrolls out of view and
+   * disappears again when it re-enters. Additionally, hide the TOC when the
+   * footer enters the viewport. This ensures the TOC becomes visible as soon as
+   * the main content starts and stays sticky until the footer.
    */
-  const hero = document.getElementById('hero');
-  const firstSection = document.getElementById('eligibility');
-  // Toggle off when hero enters the viewport
-  if (hero) {
+  // Show/hide TOC based on sentinel intersection
+  if (tocSentinel) {
     new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+      if (!entry.isIntersecting) {
+        root.classList.add('toc--visible');
+      } else {
         root.classList.remove('toc--visible');
       }
-    }, { threshold: 0 }).observe(hero);
+    }, { threshold: 0 }).observe(tocSentinel);
   }
-  // Toggle on when first section enters the viewport
-  if (firstSection) {
-    new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        root.classList.add('toc--visible');
-      }
-    }, { threshold: 0 }).observe(firstSection);
-  }
-  // Hide again only when footer enters the viewport
+  // Hide TOC when footer enters the viewport
   if (footer) {
     new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
