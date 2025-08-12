@@ -14,18 +14,36 @@ document.addEventListener('DOMContentLoaded', () => {
     root.style.setProperty('--header-h', `${header.offsetHeight}px`);
   }
 
-  // Show TOC after sentinel leaves viewport
-  if (tocSentinel) {
+  /*
+   * Rework TOC visibility logic. The earlier implementation relied on a zero‑height
+   * sentinel <hr> element to toggle the TOC when it scrolled out of view. In
+   * practice the IntersectionObserver sometimes failed to fire because the
+   * sentinel had no height. To make the behaviour deterministic, observe the
+   * hero and the first content section instead. When the hero is in view the
+   * TOC is hidden; as soon as the first section (eligibility) appears the TOC
+   * becomes visible. It is hidden again only when the footer enters the
+   * viewport. This matches the requirement that the TOC appears upon
+   * entering “Eligibility Requirements” and stays sticky until the footer.
+   */
+  const hero = document.getElementById('hero');
+  const firstSection = document.getElementById('eligibility');
+  // Toggle off when hero enters the viewport
+  if (hero) {
     new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) {
-        root.classList.add('toc--visible');
-      } else {
+      if (entry.isIntersecting) {
         root.classList.remove('toc--visible');
       }
-    }, { threshold: 0 }).observe(tocSentinel);
+    }, { threshold: 0 }).observe(hero);
   }
-
-  // Hide TOC when footer enters viewport (but otherwise keep visible)
+  // Toggle on when first section enters the viewport
+  if (firstSection) {
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        root.classList.add('toc--visible');
+      }
+    }, { threshold: 0 }).observe(firstSection);
+  }
+  // Hide again only when footer enters the viewport
   if (footer) {
     new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
