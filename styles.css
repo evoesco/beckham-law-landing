@@ -62,7 +62,7 @@ h3 {
 }
 
 .site-logo img {
-  height: var(--control-h);
+  height: calc(var(--control-h) * 2);
   width: auto;
   display: block;
 }
