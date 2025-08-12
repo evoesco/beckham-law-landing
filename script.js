@@ -2,12 +2,12 @@
 // and inertial scroll effect
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
-  const tocSentinel = document.getElementById('toc-sentinel');
   const footer = document.querySelector('footer');
   const header = document.querySelector('.site-header');
   const navLinks = document.querySelectorAll('.section-index a');
   // sections inside the content area (exclude hero)
   const sections = document.querySelectorAll('.sections-content section');
+  const firstSection = sections[0];
 
   // Measure header height for sticky offset and expose via CSS variable
   if (header) {
@@ -15,21 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /*
-   * Toggle TOC visibility based on a sentinel element. The table of contents
-   * appears when the horizontal rule (#toc-sentinel) scrolls out of view and
-   * disappears again when it re-enters. Additionally, hide the TOC when the
-   * footer enters the viewport. This ensures the TOC becomes visible as soon as
-   * the main content starts and stays sticky until the footer.
+   * Toggle TOC visibility when the first content section enters the viewport.
+   * Additionally, hide the TOC when the footer enters the viewport. This ensures
+   * the TOC becomes visible as soon as the main content starts and stays sticky
+   * until the footer.
    */
-  // Show/hide TOC based on sentinel intersection
-  if (tocSentinel) {
+  // Show/hide TOC based on first section intersection
+  if (firstSection) {
     new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) {
+      if (entry.isIntersecting) {
         root.classList.add('toc--visible');
       } else {
         root.classList.remove('toc--visible');
       }
-    }, { threshold: 0 }).observe(tocSentinel);
+    }, { threshold: 0, rootMargin: `-${header ? header.offsetHeight : 0}px 0px 0px 0px` }).observe(firstSection);
   }
   // Hide TOC when footer enters the viewport
   if (footer) {
@@ -68,8 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetId = link.getAttribute('href').replace('#', '');
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth' });
+        const headerH = header ? header.offsetHeight : 0;
+        const top = targetEl.offsetTop - headerH;
+        window.scrollTo({ top, behavior: 'smooth' });
       }
+      navLinks.forEach((n) => n.classList.remove('active'));
+      link.classList.add('active');
     });
   });
 
