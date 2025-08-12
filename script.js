@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Measure header height for sticky offset and expose via CSS variable
   if (header) {
-    root.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    const setHeaderHeight = () => root.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    setHeaderHeight();
+    window.addEventListener('resize', setHeaderHeight);
   }
 
   /*
@@ -47,10 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
           navLinks.forEach((link) => {
-            link.classList.toggle(
-              'active',
-              link.getAttribute('href') === `#${id}`
-            );
+            const isActive = link.getAttribute('href') === `#${id}`;
+            link.classList.toggle('active', isActive);
+            if (isActive) {
+              link.setAttribute('aria-current', 'page');
+            } else {
+              link.removeAttribute('aria-current');
+            }
           });
         }
       });
@@ -61,14 +66,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Smooth scroll behavior for nav links
+  // Smooth scroll behavior for nav links, respecting header height and prefers-reduced-motion
+  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   navLinks.forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      const targetId = link.getAttribute('href').replace('#', '');
+      const targetId = link.getAttribute('href').slice(1);
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth' });
+        const headerH = header ? header.offsetHeight : 0;
+        const top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerH;
+        window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       }
     });
   });
@@ -76,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inertial scroll for pointer devices (disable on touch devices)
   (function () {
     if (!matchMedia('(pointer: fine)').matches) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let current = window.pageYOffset;
     let target = current;
     let rafId = null;
