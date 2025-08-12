@@ -1,0 +1,40 @@
+name: Preview Deployment
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Copy site to previews repository
+        run: |
+          pr_number="${{ github.event.number }}"
+          preview_dir="pr-${pr_number}"
+          git clone --depth=1 https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/evoesco/beckham-law-previews.git previews
+          mkdir -p previews/$preview_dir
+          rsync -av --delete --exclude '.git' ./ previews/$preview_dir/
+          cd previews
+          git add .
+          git commit -m "docs: preview for PR ${pr_number}" || echo "Nothing to commit"
+          git push origin HEAD:main
+      - name: Comment preview URL
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.issue.number;
+            const previewUrl = `https://evoesco.github.io/beckham-law-previews/pr-${prNumber}/index.html`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `\ud83d\udce3 Preview URL: ${previewUrl}`
+            });
