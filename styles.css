@@ -3,8 +3,15 @@
   --bg-color: #f8f8f8;
   --text-color: #111;
   --border-color: #e0e0e0;
-  --primary-font: 'Inter', sans-serif;
-  --heading-font: 'Bodoni Moda', serif;
+  /* Layout containers and gaps */
+  --container: max(62rem, 68vw);
+  --gap: clamp(24px, 3.5vw, 48px);
+  --toc-w: 260px;
+  --control-h: clamp(42px, 4.2vw, 56px);
+  --sticky-offset: clamp(8px, 1.5vw, 14px);
+  /* Typography */
+  --primary-font: 'Geist', 'Inter', system-ui, -apple-system, Arial, sans-serif;
+  --heading-font: 'Bennet Display Condensed', 'Bodoni Moda', serif;
 }
 
 /* Base styles */
@@ -27,27 +34,38 @@ h1, h2, h3 {
   margin-top: 0;
 }
 
+/* Specific heading sizes and weights */
+h2,
+h3 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: clamp(28px, 3.1vw, 40px);
+}
+
 /* Header */
-header {
+.site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding-block: 10px;
+  padding-inline: 2rem;
   background-color: var(--bg-color);
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-header .logo {
-  height: 40px;
+.site-logo img {
+  height: var(--control-h);
   width: auto;
   display: block;
 }
 
-header .cta-button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
+.cta {
+  display: inline-flex;
+  align-items: center;
+  height: var(--control-h);
+  padding-inline: 16px;
   border: 1px solid var(--text-color);
   border-radius: 4px;
   color: var(--text-color);
@@ -56,7 +74,7 @@ header .cta-button {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-header .cta-button:hover {
+.cta:hover {
   background-color: var(--text-color);
   color: var(--bg-color);
 }
@@ -140,17 +158,41 @@ header .cta-button:hover {
   font-weight: 600;
 }
 
-/* Side index */
-.side-index {
-  position: fixed;
-  top: 50%;
-  right: 2rem;
-  transform: translateY(-50%);
-  display: none;
-  z-index: 900;
+/* Sections grid and index */
+.section-start {
+  border: 0;
+  border-top: 1px solid #e7e7e7;
+  margin: 40px 0 0;
 }
 
-.side-index ul {
+.sections-grid {
+  display: grid;
+  grid-template-columns: var(--toc-w) 1fr;
+  column-gap: var(--gap);
+  max-width: var(--container);
+  margin: 0 auto;
+  align-items: start;
+}
+
+.section-index {
+  position: sticky;
+  top: calc(var(--header-h, 0px) + var(--sticky-offset));
+  align-self: start;
+  visibility: hidden;
+}
+
+/* When sentinel has been passed, show the TOC */
+.toc--visible .section-index {
+  visibility: visible;
+}
+
+/* Ensure content doesn't overlap the TOC */
+.sections-content > * {
+  max-width: 100%;
+}
+
+/* Style TOC list */
+.section-index ul {
   list-style: none;
   margin: 0;
   padding: 1rem;
@@ -160,32 +202,28 @@ header .cta-button:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.side-index li {
+.section-index li {
   margin-bottom: 0.5rem;
 }
 
-.side-index li:last-child {
+.section-index li:last-child {
   margin-bottom: 0;
 }
 
-.side-index a {
+.section-index a {
   text-decoration: none;
   color: #555;
   font-size: 0.85rem;
   transition: color 0.2s ease;
 }
 
-.side-index a:hover {
+.section-index a:hover {
   color: var(--text-color);
 }
 
-.side-index a.active {
+.section-index a.active {
   font-weight: bold;
   color: var(--text-color);
-}
-
-.side-index.show {
-  display: block;
 }
 
 /* Footer */
@@ -222,22 +260,22 @@ footer {
   .section-text {
     flex: 1;
   }
-  .side-index a {
+  .section-index a {
     font-size: 0.9rem;
   }
 }
 
 @media (max-width: 767px) {
-  /* Hide side index completely on small screens */
-  .side-index {
+  /* Hide the section index completely on small screens */
+  .section-index {
     display: none !important;
   }
-  header {
+  .site-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  header .cta-button {
+  .cta {
     align-self: flex-end;
   }
 }
