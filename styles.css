@@ -15,6 +15,10 @@
 }
 
 /* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background-color: var(--bg-color);
@@ -123,6 +127,7 @@ h3 {
 
 .content-section:first-of-type {
   border-top: none;
+  padding-top: 0;
 }
 
 .section-image img {
@@ -159,7 +164,7 @@ h3 {
 .section-start {
   border: 0;
   border-top: 1px solid #e7e7e7;
-  margin: 40px 0 0;
+  margin: 0;
 }
 
 .sections-grid {
@@ -169,6 +174,7 @@ h3 {
   max-width: var(--container);
   margin: 0 auto;
   align-items: start;
+  padding-top: 4rem;
 }
 
 .section-index {
