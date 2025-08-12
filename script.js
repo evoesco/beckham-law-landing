@@ -1,5 +1,4 @@
 // Updated IntersectionObserver logic for TOC visibility and section highlighting
-// and inertial scroll effect
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
   const tocSentinel = document.getElementById('toc-sentinel');
@@ -66,50 +65,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Smooth scroll behavior for nav links, respecting header height and prefers-reduced-motion
-  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  navLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      const targetId = link.getAttribute('href').slice(1);
-      const targetEl = document.getElementById(targetId);
-      if (targetEl) {
-        const headerH = header ? header.offsetHeight : 0;
-        const top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerH;
-        window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-      }
-    });
-  });
-
-  // Inertial scroll for pointer devices (disable on touch devices)
-  (function () {
-    if (!matchMedia('(pointer: fine)').matches) return;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let current = window.pageYOffset;
-    let target = current;
-    let rafId = null;
-    const ease = 0.12;
-    const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
-
-    function onWheel(ev) {
-      ev.preventDefault();
-      target += ev.deltaY;
-      target = clamp(
-        target,
-        0,
-        document.body.scrollHeight - window.innerHeight
-      );
-      if (!rafId) rafId = requestAnimationFrame(update);
-    }
-    function update() {
-      current += (target - current) * ease;
-      window.scrollTo(0, current);
-      if (Math.abs(target - current) > 0.5) {
-        rafId = requestAnimationFrame(update);
-      } else {
-        rafId = null;
-      }
-    }
-    window.addEventListener('wheel', onWheel, { passive: false });
-  })();
 });
