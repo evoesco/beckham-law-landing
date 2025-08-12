@@ -8,6 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // sections inside the content area (exclude hero)
   const sections = document.querySelectorAll('.sections-content section');
 
+  // make TOC links clickable with smooth scroll and active state
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      navLinks.forEach((l) => {
+        l.classList.remove('active');
+        l.removeAttribute('aria-current');
+      });
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    });
+  });
+
   // Measure header height for sticky offset and expose via CSS variable
   if (header) {
     const setHeaderHeight = () => root.style.setProperty('--header-h', `${header.offsetHeight}px`);
@@ -58,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
       });
-    }, { threshold: 0.6 });
+    }, { threshold: 0.3 });
 
     sections.forEach((section) => {
       sectionObserver.observe(section);
