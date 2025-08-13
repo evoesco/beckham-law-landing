@@ -3,12 +3,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
   const footer = document.querySelector('footer');
   const header = document.querySelector('.site-header');
+  const hero = document.querySelector('#hero');
   const navLinks = document.querySelectorAll('.section-index a');
   // sections inside the content area (exclude hero)
   const sections = document.querySelectorAll('.sections-content section');
 
-  // show TOC by default
-  root.classList.add('toc--visible');
+  let heroVisible = true;
+  let footerVisible = false;
+
+  const updateTocVisibility = () => {
+    if (!heroVisible && !footerVisible) {
+      root.classList.add('toc--visible');
+    } else {
+      root.classList.remove('toc--visible');
+    }
+  };
+
+  updateTocVisibility();
+
+  if (hero) {
+    new IntersectionObserver(([entry]) => {
+      heroVisible = entry.isIntersecting;
+      updateTocVisibility();
+    }, { threshold: 0 }).observe(hero);
+  }
 
   // make TOC links clickable with smooth scroll and active state
   navLinks.forEach((link) => {
@@ -40,11 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   if (footer) {
     new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        root.classList.remove('toc--visible');
-      } else {
-        root.classList.add('toc--visible');
-      }
+      footerVisible = entry.isIntersecting;
+      updateTocVisibility();
     }, { threshold: 0 }).observe(footer);
   }
 
