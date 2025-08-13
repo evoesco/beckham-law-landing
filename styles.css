@@ -168,19 +168,16 @@ h3 {
 }
 
 .sections-grid {
-  display: grid;
-  grid-template-columns: var(--toc-w) 1fr;
-  column-gap: var(--gap);
   max-width: var(--container);
-  margin: 0 auto;
-  align-items: start;
+  margin-left: calc(var(--toc-w) + var(--gap) + 2rem);
   padding-top: 4rem;
 }
 
 .section-index {
-  position: sticky;
+  position: fixed;
   top: calc(var(--header-h, 0px) + var(--sticky-offset));
-  align-self: start;
+  left: 2rem;
+  width: var(--toc-w);
   visibility: hidden;
 }
 
@@ -272,6 +269,9 @@ footer {
   /* Hide the section index completely on small screens */
   .section-index {
     display: none !important;
+  }
+  .sections-grid {
+    margin-left: 0;
   }
   .site-header {
     flex-direction: column;
