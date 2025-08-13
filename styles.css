@@ -169,21 +169,22 @@ h3 {
 
 .sections-grid {
   max-width: var(--container);
-  margin-left: calc(var(--toc-w) + var(--gap) + 2rem);
-  padding-top: 4rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  padding: 4rem 2rem 0;
 }
 
 .section-index {
-  position: fixed;
+  position: sticky;
   top: calc(var(--header-h, 0px) + var(--sticky-offset));
-  left: 2rem;
   width: var(--toc-w);
-  visibility: hidden;
+  flex-shrink: 0;
 }
 
-/* When sentinel has been passed, show the TOC */
-.toc--visible .section-index {
-  visibility: visible;
+.sections-content {
+  flex: 1;
 }
 
 /* Ensure content doesn't overlap the TOC */
@@ -271,7 +272,8 @@ footer {
     display: none !important;
   }
   .sections-grid {
-    margin-left: 0;
+    flex-direction: column;
+    padding: 4rem 1rem 0;
   }
   .site-header {
     flex-direction: column;

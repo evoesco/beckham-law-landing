@@ -1,14 +1,10 @@
-// Updated IntersectionObserver logic for TOC visibility and section highlighting
+// IntersectionObserver logic for TOC section highlighting
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
-  const footer = document.querySelector('footer');
   const header = document.querySelector('.site-header');
   const navLinks = document.querySelectorAll('.section-index a');
   // sections inside the content area (exclude hero)
   const sections = document.querySelectorAll('.sections-content section');
-
-  // show TOC by default
-  root.classList.add('toc--visible');
 
   // make TOC links clickable with smooth scroll and active state
   navLinks.forEach((link) => {
@@ -32,20 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const setHeaderHeight = () => root.style.setProperty('--header-h', `${header.offsetHeight}px`);
     setHeaderHeight();
     window.addEventListener('resize', setHeaderHeight);
-  }
-
-  /*
-   * Keep the table of contents visible with the sections and hide it when the
-   * footer enters the viewport so it doesn't overlap.
-   */
-  if (footer) {
-    new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        root.classList.remove('toc--visible');
-      } else {
-        root.classList.add('toc--visible');
-      }
-    }, { threshold: 0 }).observe(footer);
   }
 
   // Highlight active section in the TOC
