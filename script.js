@@ -1,12 +1,14 @@
 // Updated IntersectionObserver logic for TOC visibility and section highlighting
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
-  const tocSentinel = document.getElementById('toc-sentinel');
   const footer = document.querySelector('footer');
   const header = document.querySelector('.site-header');
   const navLinks = document.querySelectorAll('.section-index a');
   // sections inside the content area (exclude hero)
   const sections = document.querySelectorAll('.sections-content section');
+
+  // show TOC by default
+  root.classList.add('toc--visible');
 
   // make TOC links clickable with smooth scroll and active state
   navLinks.forEach((link) => {
@@ -33,27 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /*
-   * Toggle TOC visibility based on a sentinel element. The table of contents
-   * appears when the horizontal rule (#toc-sentinel) scrolls out of view and
-   * disappears again when it re-enters. Additionally, hide the TOC when the
-   * footer enters the viewport. This ensures the TOC becomes visible as soon as
-   * the main content starts and stays sticky until the footer.
+   * Keep the table of contents visible with the sections and hide it when the
+   * footer enters the viewport so it doesn't overlap.
    */
-  // Show/hide TOC based on sentinel intersection
-  if (tocSentinel) {
-    new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) {
-        root.classList.add('toc--visible');
-      } else {
-        root.classList.remove('toc--visible');
-      }
-    }, { threshold: 0 }).observe(tocSentinel);
-  }
-  // Hide TOC when footer enters the viewport
   if (footer) {
     new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         root.classList.remove('toc--visible');
+      } else {
+        root.classList.add('toc--visible');
       }
     }, { threshold: 0 }).observe(footer);
   }
